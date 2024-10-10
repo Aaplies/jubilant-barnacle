@@ -6,16 +6,16 @@
 
 struct Player
 {
-	std::vector<int> expected_hand;
-	bool is_computer = false;
+	std::vector<int> expectedHand;
+	bool isComputer = false;
 	std::vector<int> hand; // 2 through 14
 	Player(const int HAND_SIZE, const bool IS_COMPUTER)
 	{
 		hand.reserve(HAND_SIZE);
-		is_computer = IS_COMPUTER;
+		isComputer = IS_COMPUTER;
 	}
 
-	void remove_card(const int CARD_TO_REMOVE)
+	void removeCardWithValue(const int CARD_TO_REMOVE)
 	{
 		for (auto i = hand.begin(); i != hand.end(); ++i)
 		{
@@ -27,46 +27,46 @@ struct Player
 		}
 	}
 
-	bool check_for_card(const int card_requested)
+	bool checkForCard(const int CARD_REQUESTED)
 	{
 		for (const auto i : hand)
 		{
-			if (i == card_requested) return true; // if we have the wanted card
+			if (i == CARD_REQUESTED) return true; // if we have the wanted card
 		}
 		return false;
 	}
 
-	bool remove_duplicates()
+	bool removeDuplicates()
 	{
-		bool were_pairs_found = false;
-		std::unordered_set<int> test_set;
+		bool werePairsFound = false;
+		std::unordered_set<int> testSet;
 		for (auto i = hand.begin(); i != hand.end(); ++i)
 		{
-			if (!test_set.insert(*i).second)
+			if (!testSet.insert(*i).second)
 			{
 				hand.erase(i);
 				i--;
-				were_pairs_found = true;
+				werePairsFound = true;
 			}
 		}
-		return were_pairs_found;
+		return werePairsFound;
 	}
 
-	void ask_for_card(const int CARD_REQUESTED, Player& asked_player)
+	void askForCard(const int CARD_REQUESTED, Player& AskedPlayer)
 	{
-		if (!check_for_card(CARD_REQUESTED))
+		if (!checkForCard(CARD_REQUESTED))
 		{
 			std::cout << "You must have a card to ask for it.\n";
 			return;
 		}
-		if (!asked_player.check_for_card(CARD_REQUESTED))
+		if (!AskedPlayer.checkForCard(CARD_REQUESTED))
 		{
 			std::cout << "They didn't have a(n) " << CARD_REQUESTED << ".\n";
 			return;
 		}
-		expected_hand.push_back(CARD_REQUESTED);
-		remove_card(CARD_REQUESTED);
-		asked_player.remove_card(CARD_REQUESTED);
+		expectedHand.push_back(CARD_REQUESTED);
+		removeCardWithValue(CARD_REQUESTED);
+		AskedPlayer.removeCardWithValue(CARD_REQUESTED);
 		std::cout << "They had a(n) " << CARD_REQUESTED << ".\n";
 	}
 
@@ -75,14 +75,70 @@ struct Player
 		std::sort(hand.begin(), hand.end());
 	}
 
-	std::string generate_hand_string()
+    static char cardSymbol(const int card)
+	{
+		switch (card)
+		{
+		    case 11:
+			    return 'J';
+			    break; // not necessary but /shrug
+    		case 12:
+    			return 'Q';
+    			break;
+    		case 13:
+    			return 'K';
+    			break;
+    		case 14:
+    			return 'A';
+    			break;
+    		case 10:
+    			return 'T'; // '10' is not a char. sorry.
+    			break;
+    		default:
+    			return card + 48; // ascii offset
+		}
+    }
+
+	std::string generateHandString()
 	{
 		if (hand.size() == 0) return ""; // shouldn't ever happen
-
+        std::string functionOutput = "";
+        for (auto i = hand.begin(); i != hand.end(); ++i)
+        {
+            functionOutput += *i;
+            if (i != hand.end()) functionOutput += ", ";
+        }
+        return functionOutput;
 	}
 
-	bool check_win_condition()
+	static void checkWinCondition(const std::vector<Player>& playerList)
 	{
-		return hand.size() == 0;
+        int winner = -1; // no win
+        for (int i = 0; i < playerList.size(); i++)
+        {
+            if ((playerList[i].hand.size() == 0) && (winner == -1))
+            {
+                winner = i;
+            }
+        }
+        if (winner != -1)
+        {
+            std::cout << "Player " << winner << " won!!!\n";
+            std::exit(0); // /shrug
+        }
 	}
 };
+
+void Player::playerTurn(std::vector<Player>& playerList)
+{
+    removeDuplicates();
+    int askedPlayerNumber, askedCard;
+    // sort();
+    std::cout << "Your cards are: " << generateHandString() << '\n';
+    
+}
+
+void Player::computerTurn(std::vector<Player>& playerList)
+{
+    
+}
