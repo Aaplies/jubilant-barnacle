@@ -36,7 +36,7 @@ struct Deck
 		}
 		std::uniform_int_distribution<> generateRandomNumber(0, cards.size()-1);
         const int CHOSEN_CARD_ADDRESS = generateRandomNumber(randomDevice);
-		const int CHOSEN_CARD = cards.at(CHOSEN_CARD_ADDRESS); // .at() safer than []
+	const int CHOSEN_CARD = cards.at(CHOSEN_CARD_ADDRESS); // .at() safer than []
         removeCard(CHOSEN_CARD_ADDRESS);
         return CHOSEN_CARD;
 	}
