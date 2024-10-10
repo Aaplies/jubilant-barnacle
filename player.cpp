@@ -116,7 +116,7 @@ struct Player
         int winner = -1; // no win
         for (int i = 0; i < playerList.size(); i++)
         {
-            if (playerList[i].hand.size() == 0)
+            if ((playerList[i].hand.size() == 0) && (winner == -1))
             {
                 winner = i;
             }
@@ -128,3 +128,17 @@ struct Player
         }
 	}
 };
+
+void Player::playerTurn(std::vector<Player>& playerList)
+{
+    removeDuplicates();
+    int askedPlayerNumber, askedCard;
+    // sort();
+    std::cout << "Your cards are: " << generateHandString() << '\n';
+    
+}
+
+void Player::computerTurn(std::vector<Player>& playerList)
+{
+    
+}
