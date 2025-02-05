@@ -2,7 +2,7 @@
 #include <iostream>
 #include <random>
 
-struct deck
+struct Deck
 {
 	void addCardsToDeck()
 	{
@@ -14,44 +14,30 @@ struct deck
 	}
 
 	std::vector<int> cards;
-	std::random_device random;
+	std::random_device randomDevice;
 
-	deck()
+	Deck()
 	{
 		addCardsToDeck();
 	}
+
+    void removeCard(const int card)
+    {
+        auto iter = cards.begin() + card;
+        cards.erase(iter);
+    }
 
 	int pickCard()
 	{
 		if (cards.size() == 0)
 		{
-			std::cout << "pickCard called on empty deck!\n"; // I don't think this can happen normally
+			std::cout << "pickCard called on empty deck!\n"; // can happen with a lot of players
 			std::exit(1);
 		}
 		std::uniform_int_distribution<> generateRandomNumber(0, cards.size()-1);
-	}
-
-	static char cardSymbol(const int card)
-	{
-		switch (card)
-		{
-		case 11:
-			return 'J';
-			break;
-		case 12:
-			return 'Q';
-			break;
-		case 13:
-			return 'K';
-			break;
-		case 14:
-			return 'A';
-			break;
-		case 10:
-			return 'T'; // '10' is not a char. sorry.
-			break;
-		default:
-			return card + 48; // ascii offset
-		}
+        const int CHOSEN_CARD_ADDRESS = generateRandomNumber(randomDevice);
+	const int CHOSEN_CARD = cards.at(CHOSEN_CARD_ADDRESS); // .at() safer than []
+        removeCard(CHOSEN_CARD_ADDRESS);
+        return CHOSEN_CARD;
 	}
 };
